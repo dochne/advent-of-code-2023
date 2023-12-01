@@ -4,6 +4,17 @@ filename = ARGV[0]
 raise "You need to pass in a filename to run!" if filename.nil?
 
 folder = ARGV[0].split("/").first
+file = ARGV[0].split("/").last
 
-system("cat #{folder}/data.txt | #{filename}")
+data_file = "data.txt"
+if (ARGV[1] == "--test") 
+    data_file = "example.txt"
+    if file == "part2.rb" && File.file?("#{folder}/example2.txt") 
+        data_file = "example2.txt"
+    end
+end
+
+print "Data: #{folder}/#{data_file}\n\n"
+
+system("cat #{folder}/#{data_file} | #{filename}")
 
