@@ -6,5 +6,4 @@ value = STDIN.read.lines(chomp: true)
     .reverse
     .reduce([]) {|acc, total| acc << acc.last(total).sum + 1 }
     .sum
-
 p(value)
