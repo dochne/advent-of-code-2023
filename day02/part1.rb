@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-
 value = STDIN.read.lines(chomp: true)
     .map{_1.match(/Game (\d*): (.*)/)}
     .map{[_1[1].to_i, _1[2].split("; ").map{|round| round.split(", ")}]}
@@ -18,7 +17,4 @@ value = STDIN.read.lines(chomp: true)
     .map{ _1[0] }
     .sum
 
-
-
 p(value)
-# op = line.match(/= ([^ ]*) (.) ([^ ]*)/).to_a.drop(1)
