@@ -2,7 +2,6 @@
 
 input = STDIN.read.lines(chomp: true)
 
-
 RangeDst = Struct.new(:range, :dst)
 def range_intersection(input_range, range_redirections)
     return_ranges = []
@@ -26,7 +25,6 @@ def range_intersection(input_range, range_redirections)
             return_ranges << Range.new(offset, offset + width)
             idx = min + 1
         end
-
 
         if idx > input_range.last
             break
@@ -60,55 +58,30 @@ rounds = input
             .map{|dst, src, len| RangeDst.new(Range.new(src, src + (len - 1)), dst)}
             .sort_by{_1.range.first}
 
-        #     # .map{|dst, src, len|[src, src + len, Range.new(src, src + len), dst]}
-        # # ranges.unshift(RangeDst.new(Range.new(0, ranges.first.range.first), 0)) if ranges.first.range.first != 0
-        # idx = 0
-        # ranges = ranges.reduce([]) do |acc, range_dst|
-        #     acc << RangeDst.new(Range.new(idx, range_dst.range.first - 1), idx) if idx < range_dst.range.first
-        #     idx = range_dst.range.last + 1
-        #     acc << range_dst
-        # end
-        # p(ranges)
-        # exit
-        
         lambda do |input_ranges|
-            return_ranges = []
-
-
-            # p("InputRanges", input_ranges)
-            # p("Redirection", ranges_redirections)
-            
-
-
-            # p(check_ranges)
-            input_ranges.each do |input_range|
-                return_ranges << range_intersection(input_range, ranges_redirections)
-            end
-            ret = return_ranges.flatten
-
-            # p("Check Ranges", check_ranges)
-            # could we just return a subset of ranges here, each to check?
-            # So we'd end up returning [Range(10, 15)]
-            # Can we align all the ranges in order?
-            # ranges.each {|range, src, dst| return dst + (n - src) if range.include?(n)}
-            # n
+            input_ranges
+                .map{|input_range| range_intersection(input_range, ranges_redirections)}
+                .flatten
         end
     end
 
-
-cache = Hash.new
-# p(seeds)
-
-p(seeds.size)
 value = seeds.map do |start, len|
     p("Starting seed", len)
     range = Range.new(start, start + len - 1)
     p("Acc", [range])
-    rounds.reduce([range]) do |acc, round|
+    val = rounds.reduce([range]) do |acc, round|
         acc = round.call(acc)
-        p(acc)
-    end.map(&:first).min
+    end
+
+    p("Val", val)
+
+    val.map(&:first).min
 end
+
+p(value.sort)
+p(value.min)
+
 # Too low
 # 26879537
-p("Val", value.min)
+# 50716416 was right, but it isn't the lowest we have. Something here isn't right, but I've somehow pulled the right answer
+# anyway, so that'll be good enough for now!
