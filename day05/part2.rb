@@ -31,7 +31,7 @@ def range_intersection(input_range, range_redirections)
         end
     end
 
-    if (idx < input_range.end)
+    if (idx <= input_range.end)
         return_ranges << Range.new(idx, input_range.end)
     end
     return_ranges

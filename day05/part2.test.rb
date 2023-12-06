@@ -1,10 +1,5 @@
 require 'test/unit'
 
-
-
-
-
-
 RangeDst = Struct.new(:range, :dst)
 
 def range_intersection(input_range, range_redirections)
@@ -35,7 +30,7 @@ def range_intersection(input_range, range_redirections)
         end
     end
 
-    if (idx < input_range.end)
+    if (idx <= input_range.end)
         return_ranges << Range.new(idx, input_range.end)
     end
     return_ranges
@@ -116,6 +111,17 @@ class MyTest < Test::Unit::TestCase
             ],
             [
                 Range.new(150, 250)
+            ]
+        ],
+        # Test using precise ending
+        [
+            Range.new(10, 20),
+            [
+                RangeDst.new(Range.new(10, 19), 110)
+            ],
+            [
+                Range.new(110, 119),
+                Range.new(20, 20)
             ]
         ],
         # Test using the "real" test data
