@@ -21,7 +21,7 @@ def rank(hand)
     total_jokers = 5 - split_hand_without_jokers.size
 
     # Special case - if there's 5 jokers, then we're 5 of a kind
-    return ("7".to_s + split_hand.join("")).to_i if total_jokers == 5
+    return ("7" + split_hand.join("")).to_i if total_jokers == 5
     tally = split_hand_without_jokers.tally.values.sort.reverse
     tally[0] += total_jokers    
     
