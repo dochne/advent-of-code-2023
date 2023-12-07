@@ -5,18 +5,27 @@ Hand = Struct.new(:hand, :bid, :score)
 
 
 def rank(hand)
+    # hand = "AKQJT"
     split_hand = hand.split("")
         .map{
             _1
             .sub("A", "14")
             .sub("K", "13")
             .sub("Q", "12")
-            .sub("J", "11")
+            .sub("J", "01")
             .sub("T", "10")
             .rjust(2, "0")
         }
         
-    prefix = case split_hand.tally.values.sort.reverse
+    split_hand_without_jokers = split_hand.filter{_1 != "01"}
+    total_jokers = 5 - split_hand_without_jokers.size
+
+    # Special case - if there's 5 jokers, then we're 5 of a kind
+    return ("7".to_s + split_hand.join("")).to_i if total_jokers == 5
+    tally = split_hand_without_jokers.tally.values.sort.reverse
+    tally[0] += total_jokers    
+    
+    prefix = case tally
     when [5]
         7 # full house
     when [4, 1]
@@ -32,53 +41,17 @@ def rank(hand)
     when [1, 1, 1, 1, 1]
         1 # high card
     end
-    score = (prefix.to_s + split_hand.join("")).to_i
-    print(hand, "-", prefix, "-", score, "\n")
-    score
+    (prefix.to_s + split_hand.join("")).to_i
 end
-# Five of a kind, where all five cards have the same label: AAAAA
-# Four of a kind, where four cards have the same label and one card has a different label: AA8AA
-# Full house, where three cards have the same label, and the remaining two cards share a different label: 23332
-# Three of a kind, where three cards have the same label, and the remaining two cards are each different from any other card in the hand: TTT98
-# Two pair, where two cards share one label, two other cards share a second label, and the remaining card has a third label: 23432
-# One pair, where two cards share one label, and the other three cards have a different label from the pair and each other: A23A4
-# High card, where all cards' labels are distinct: 23456
 
-# rank(["03","02","10","03","13"])
-
-
-# exit
 value = STDIN.read.lines(chomp: true)
     .map{_1.split(" ")}
     .map{Hand.new(_1, _2.to_i, 0)}
     .each do |hand|
-        # hand.hand = hand.hand
-        #     .split("")
-        #     .map{
-        #         _1
-        #         .sub("A", "14")
-        #         .sub("K", "13")
-        #         .sub("Q", "12")
-        #         .sub("J", "11")
-        #         .sub("T", "10")
-        #         .rjust(2, "0")
-        #     }
         hand.score = rank(hand.hand)
     end
     .sort_by{_1.score}
-    # .reverse
     .each_with_index.map do |hand, rank|
-        print(
-            hand.hand, ": ",
-            hand.bid.to_s.rjust(3, " "),
-            " - ",
-            rank + 1,
-            " - ",
-            ((rank + 1) * hand.bid).to_s.rjust(4, " "),
-            " - ",
-            hand.score,
-            "\n"
-        )
         (rank + 1) * hand.bid
     end
     .sum
