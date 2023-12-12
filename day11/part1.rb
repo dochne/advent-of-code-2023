@@ -28,51 +28,8 @@ distances = input.reduce([]) do |acc, vector|
         horizontal = [vector[0].abs, compare_vector[0].abs]
         vertical = [vector[1].abs, compare_vector[1].abs]
         acc << (horizontal.max - horizontal.min) + (vertical.max - vertical.min)
-        # if min_distance.nil? || compare_distance < min_distance
-        #     min_distance = compare_distance
-        #     # print("Min:", min_distance, " Vec: ", vector, "Compare: ", compare_vector, "\n")
-        # end
     end
     acc
 end
 
 p(distances.sum / 2)
-# distances = input.map do |vector|
-#     min_distance = nil
-#     input.each do |compare_vector|
-#         if vector == compare_vector
-#             next
-#         end
-
-#         horizontal = [vector[0].abs, compare_vector[0].abs]
-#         vertical = [vector[1].abs, compare_vector[1].abs]
-#         compare_distance = (horizontal.max - horizontal.min) + (vertical.max - vertical.min)
-#         if min_distance.nil? || compare_distance < min_distance
-#             min_distance = compare_distance
-#             print("Min:", min_distance, " Vec: ", vector, "Compare: ", compare_vector, "\n")
-#         end
-#     end
-#     min_distance
-# end
-
-# p(distances)
-
-# input.each do |line|
-#     print(line.join(""), "\n")
-# end
-
-
-# ....#........
-# .........#...
-# #............
-# .............
-# .............
-# ........#....
-# .#...........
-# ............#
-# .............
-# .............
-# .........#...
-# #....#.......
-
-#p(value)

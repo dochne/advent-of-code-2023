@@ -31,11 +31,9 @@ input = STDIN.read.lines(chomp: true)
     end
     .yield_self do |vectors, rules|
         vectors.map do |vector|
-            new_vec = vector.dup
-            rules.each do |rule|
+            rules.reduce(vector.dup) do |new_vec, rule|
                 new_vec += rule.call(vector)
             end
-            new_vec
         end
     end
 
