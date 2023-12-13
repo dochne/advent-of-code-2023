@@ -2,4 +2,4 @@
 
 input = STDIN.read.lines(chomp: true)
 
-p(input))
+p(input)
