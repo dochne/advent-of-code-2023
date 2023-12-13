@@ -22,7 +22,6 @@ input = STDIN.read.lines(chomp: true)
         acc
     end
 
-p(input)
 distances = input.reduce([]) do |acc, vector|
     input.each do |compare_vector|
         horizontal = [vector[0].abs, compare_vector[0].abs]

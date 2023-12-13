@@ -8,10 +8,12 @@ file = ARGV[0].split("/").last
 
 data_file = "data.txt"
 if (ARGV[1] == "--test") 
-    data_file = "example.txt"
-    if file == "part2.rb" && File.file?("#{folder}/example2.txt") 
-        data_file = "example2.txt"
-    end
+    system("ruby #{folder}/#{file.sub(".rb", ".test.rb")}")
+    exit
+end
+
+if !ARGV[1].nil? 
+    data_file = ARGV[1].sub("--", "") + ".txt"
 end
 
 print "Data: #{folder}/#{data_file}\n\n"
