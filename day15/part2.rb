@@ -3,21 +3,13 @@
 input = STDIN.read.lines(chomp: true)
     .first
     .split(",")
-    .reduce(Hash.new) do |acc, step|
-        _, label, operator, value = step.match(/^([^-=]*)([-=])(.*)$/).to_a
-        box = label.split("").reduce(0) do |acc, char|
-            (acc + char.ord) * 17 % 256
-        end
-
-        acc[box] = Hash.new if acc[box].nil?
-
+    .each_with_object(Hash.new {|h, k| h[k] = {}}) do |step, acc|
+        _, label, operator, length = step.match(/^([^-=]*)([-=])(.*)$/).to_a
+        box = acc[label.split("").reduce(0) { |acc, char| (acc + char.ord) * 17 % 256 }]
         if operator == "="
-            acc[box][label] = value.to_i
-        else
-            acc[box].delete(label)
+            next box[label] = length.to_i
         end
-
-        acc
+        box.delete(label)
     end
     .each_pair.reduce(0) do |acc, (key, box)|
         acc += (key + 1) * (box.values.each_with_index.map {_1 * (_2 + 1)}.sum)
