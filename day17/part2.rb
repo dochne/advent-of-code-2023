@@ -14,31 +14,6 @@ def reconstruct_path(came_from, current)
     return total_path
 end
 
-
-# class Struct
-#     # @my_hash = nil
-#     # def initialize(**args)
-#     #     super(*args)
-#     # end
-#     # def self.from_hash(h)
-#     #     p("oh oh")
-#     #   new *members.map{ |m| h[m] }
-#     # end
-  
-#     # def to_h # Note: Ruby 2.0 has added this http://ruby-doc.org/core-2.0/Struct.html#method-i-to_h
-#     #     p("fofof")
-#     #   Hash[members.zip(values)]
-#     # end
-
-#     def hash
-#         if self[:my_hash].nil?
-#             self[:my_hash] = super.hash
-#         end
-#         self[:my_hash]
-#         # super.hash
-#     end
-#   end
-
 Neighbour = Struct.new(:pos, :dir, :times)
 
 def walk(start, goal, heuristic)
@@ -47,7 +22,7 @@ def walk(start, goal, heuristic)
 
     g_score = Hash.new{|h,k| Float::INFINITY}
     g_score[start] = 0
-    f_score = {} #Hash.new{|h,k| Float::INFINITY}
+    f_score = {}
     f_score[start] = 0
 
     loops = 0
@@ -73,53 +48,17 @@ def walk(start, goal, heuristic)
             neighbour = Neighbour.new(pos, dir, dir == current.dir ? current.times + 1 : 1)
             next if neighbour.times > 10
 
-            # p("Attempting", neighbour)
-            # print("Visting ", pos, "\n")
-            # if pos == goal
-            #     print("Technically complete")
-            #     exit
-            # end
-            # prev = came_from[current]
-
-            # The thing that becomes funky here is that the replacement is not technically accurate
-            # Can we get away with it if we treat everything as four separate nodes?
-            # Actually, I guess 12
-
-            # if !prev.nil?
-            #     prev_prev = came_from[prev]
-            #     if !prev_prev.nil?
-            #         prev_prev_prev = came_from[prev_prev]
-            #         if !prev_prev_prev.nil?
-            #             next if prev_prev_prev == current + ((dir * -1) * 3)
-            #         end
-            #     end
-            # end
-
-            # VISITED[pos] += 1
-
-            # p(neighbour)
-            # p(GRID[neighbour[1]][neighbour[0]])
-            # exit
-            # We need to handle "our extra "no three in a row here" too
-
-            # p(GRID[neighbour[1]][neighbour[0]])
-
             tentative_gscore = g_score[current] + GRID[pos[1]][pos[0]]
 
             if tentative_gscore < g_score[neighbour]
                 came_from[neighbour] = current
                 g_score[neighbour] = tentative_gscore
-                f_score[neighbour] = tentative_gscore + (goal - pos).sum #heuristic.call(neighbour.pos, goal)
-                # debugger
-                # p("Adding neighbour", neighbour)
-                
+                f_score[neighbour] = tentative_gscore + (goal - pos).sum
                 open_set.add(neighbour)
             end
         end
     end
 
-    # p("We failed")
-    # exit
     return nil
 end
 
@@ -133,14 +72,6 @@ value = walk(
     Vector[GRID[0].size - 1, GRID.size - 1],
     Proc.new {|from, to| (to - from).sum}
 )
-
-# value = walk(
-#     Neighbour.new(Vector[GRID[0].size - 1, GRID.size - 1], Vector[0, 0], 0),
-#     Vector[0,0],
-#     Proc.new {|from, to| (to - from).sum}
-# )
-
-# Ideal route would be 61
 
 if value.nil?
     p("Failed")
