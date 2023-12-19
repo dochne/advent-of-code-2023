@@ -56,13 +56,5 @@ parts.each do |part|
     }
 end
 
-# p(accepted)
-
-# p(rejected)
-    
-
 print("\n")
 p(accepted.map{_1.values.sum}.sum)
-
-
-# p(workflows)
