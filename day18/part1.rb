@@ -38,36 +38,44 @@ max_x, max_y = input.keys.reduce([0, 0]) do |(max_x, max_y), vector|
 end
 
 
+# output = input
+stack = [input.first[0] + Vector[1,1]]
+while vector = stack.pop
+    next if !input[vector].nil?  #!input[vector].nil?
+    input[vector] = 1
+    [Vector[-1, 0], Vector[1, 0], Vector[0, 1], Vector[0, -1]].each do |dir|
+        stack << vector + dir
+    end
+end
+
+
+
 total = 0
 
 (max_y + 2).times do |y|
-    in_cell = 0
-    total_in_row = 0
-    (max_x + 2).times do |x|
-        # if input[Vector[x, y]]
-        #     p(input[Vector[x, y]][1])
-        #     exit
-        # end
-        total_in_row += input[Vector[x, y]][1] if input[Vector[x, y]]
-    end
+    # in_cell = 0
+    # total_in_row = 0
+    # (max_x + 2).times do |x|
+    #     total_in_row += input[Vector[x, y]][1] if input[Vector[x, y]]
+    # end
 
     # print(total_in_row, " - ")
     (max_x + 2).times do |x|
         if input[Vector[x, y]]
-            in_cell += input[Vector[x, y]][1]
+            # in_cell += input[Vector[x, y]][1]
             # in_hole +=1
             total +=1
             print("#")
         else
             
             # exit
-            if in_cell % 2 == 1 && in_cell != total_in_row
-                total +=1
-                print("#")
-            else
+            # if in_cell % 2 == 1 && in_cell != total_in_row
+            #     total +=1
+            #     print("#")
+            # else
                 # print(in_cell)
-                print(".")
-            end
+            print(".")
+            # end
         end
     end
     print("\n")
