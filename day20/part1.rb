@@ -11,15 +11,6 @@ inputs = input.reduce(Hash.new{|h, k| h[k] = []}) do |acc, (type, name, dests)|
 end
 
 modules = input.reduce({}) do |acc, (type, name, dests)|
-    state = case type
-    when "%"
-        0
-    when "&"
-        Hash[inputs[name].map{|k| [k, 0]}]
-    else
-        nil
-    end
-
     acc[name] = {
         type: type,
         state: 0,

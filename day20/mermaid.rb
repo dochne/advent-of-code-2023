@@ -9,6 +9,12 @@ chart = input.reduce([]) do |acc, line|
     acc
 end
 
-print(chart.join("\n"))
+print("flowchart TD\n")
+print("  button --> broadcaster\n    ")
+print(
+chart
+    .sort_by!{_1.start_with?("broadcaster") ? 0 : 1}
+    .join("\n    ")
+)
 
 # -->
