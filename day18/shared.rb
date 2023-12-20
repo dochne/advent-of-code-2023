@@ -57,7 +57,7 @@ def area(nodes)
             nodes << bottom_right_node
         end
 
-        # total += offset
+        total += offset
         # print("Square ", top_left_node, " ", top_right_node, " ", bottom_left_node, " ", bottom_right_node, "- Size ", size, "\n")
         # print("Size of Square: ", size, ", Adjustment: ", offset, ", Vector: ", size_vector, ", New Total: ", total, ", Remaining:", nodes.size, "\n")
 
