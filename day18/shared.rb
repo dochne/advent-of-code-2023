@@ -1,6 +1,8 @@
 require 'json'
 require 'colorize'
 
+DIRECTION_MAP = {"R" => Vector[1, 0], "L" => Vector[-1, 0], "U" => Vector[0, -1], "D" => Vector[0,1]}
+
 SQUARE_COLORS = [
     # :red,
     :green,
@@ -78,7 +80,90 @@ def draw(red, before_nodes = [])
     # p(total)
 end
 
+def area_from_directions(directions)
+
+    x = 0
+    y = 0
+    area = 0
+
+    # p("Directions", directions)
+    # exit
+
+    # p(directions.first)
+    # exit
+    vertical_side = :TOP_SIDE
+    horizontal_side = :LEFT_SIDE
+
+    total_travelled = 0
+    directions.each_with_index do |(direction, distance, colour), idx|
+
+        next_direction, _ = directions[idx % directions.size + 1]
+
+
+        # print("x ", x, " y ", y, " area ", area, "\n")
+        # total_travelled += distance
+        # distance -= 1
+
+        case direction
+        when 'R'
+            if next_direction == 'U' && horizontal_side == :RIGHT_SIDE
+                horizontal_side = :LEFT_SIDE
+                distance -= 1
+            elsif next_direction == 'D' && horizontal_side == :LEFT_SIDE
+                horizontal_side = :RIGHT_SIDE
+                distance += 1
+            end
+
+            x += distance 
+            area += distance * (y)
+
+        when 'L'
+            if next_direction == 'U' && horizontal_side == :RIGHT_SIDE
+                horizontal_side = :LEFT_SIDE
+                distance += 1
+            elsif next_direction == 'D' && horizontal_side == :LEFT_SIDE
+                horizontal_side = :RIGHT_SIDE
+                distance -= 1
+            end
+
+            x -= distance
+            area -= distance * (y)
+            # total_travelled += 1
+        when 'U'
+            if next_direction == 'R' && vertical_side == :BOTTOM_SIDE
+                vertical_side = :TOP_SIDE
+                distance += 1
+            elsif next_direction == 'L' && vertical_side == :TOP_SIDE
+                vertical_side = :BOTTOM_SIDE
+                distance -= 1
+            end
+
+            y -= distance
+
+        when 'D'
+            if next_direction == 'L' && vertical_side == :TOP_SIDE
+                vertical_side = :BOTTOM_SIDE
+                distance += 1
+            elsif next_direction == 'R' && vertical_side == :BOTTOM_SIDE
+                vertical_side = :TOP_SIDE
+                distance -= 1
+            end
+
+            y += distance
+        end
+        print("Direction: ", direction, " - Distance: ", distance, ": [x,y]: ", x,", ", y.to_s.rjust(2), " Area: ", area, "\n")
+        print("NextDirection: ", next_direction, ", VerticalSide: ", vertical_side, " HorizontalSide: ", horizontal_side, "\n")
+        # p(area)
+    end
+
+    p("Travel Distance", total_travelled)
+    p("Area", area.abs)
+    area.abs
+end
+
 def area(nodes)
+
+    
     nodes = nodes.sort_by{[_1[1], _1[0]]}
     total = 0
     before_nodes = nodes.dup.map{[_1, "$"]}

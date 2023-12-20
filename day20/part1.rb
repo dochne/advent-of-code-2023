@@ -51,15 +51,11 @@ high_signals = 0
 
         print(from, " -", pulse == 1 ? "high" : "low", "-> ", name, "\n")
         if mod[:type] == "%"
-            # print(name, " received ", pulse, "\n")
             if pulse == 0
                 mod[:state] = (mod[:state] + 1) % 2
-                mod[:dests].each { |dest| stack << [dest, name ]}
+                mod[:dests].each { |dest| stack << [dest, name]}
             end
         elsif mod[:type] == "&"
-            
-            # mod[:state][from] = pulse
-            # print(name, " received ", pulse, "- ", mod[:state], "\n")
             mod[:state] = mod[:inputs].all?{_1[:state] == 1} ? 0 : 1
 
             mod[:dests].each { |dest| stack << [dest, name ]}
