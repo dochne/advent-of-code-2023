@@ -22,16 +22,27 @@ modules = input.reduce({}) do |acc, (type, name, dests)|
 
     acc[name] = {
         type: type,
-        state: state,
+        state: 0,
         dests: dests
     }
     acc
 end
 
+modules = modules.map do |key, value|
+    value[:inputs] = inputs[key].map{modules[_1]}
+    [key, value]
+end.to_h
+
+modules["button"] = {
+    type: "button",
+    state: 0,
+}
+
 modules["output"] = {
     type: "output",
     state: nil,
-    dests: []
+    dests: [],
+    inputs: []
 }
 
 
@@ -39,8 +50,9 @@ low_signals = 0
 high_signals = 0
 
 1000.times do 
-    stack = [["broadcaster", 0, "button"]]
-    while (name, pulse, from = stack.shift) do
+    stack = [["broadcaster", "button"]]
+    while (name, from = stack.shift) do
+        pulse = modules[from][:state]
         low_signals += 1 if pulse == 0
         high_signals += 1 if pulse == 1
         mod = modules[name]
@@ -51,25 +63,26 @@ high_signals = 0
             # print(name, " received ", pulse, "\n")
             if pulse == 0
                 mod[:state] = (mod[:state] + 1) % 2
-                mod[:dests].each { |dest| stack << [dest, mod[:state], name ]}
+                mod[:dests].each { |dest| stack << [dest, name ]}
             end
         elsif mod[:type] == "&"
             
-            mod[:state][from] = pulse
+            # mod[:state][from] = pulse
             # print(name, " received ", pulse, "- ", mod[:state], "\n")
-            new_pulse = mod[:state].values.all?{_1 == 1} ? 0 : 1
-            mod[:dests].each { |dest| stack << [dest, new_pulse, name ]}
+            mod[:state] = mod[:inputs].all?{_1[:state] == 1} ? 0 : 1
+
+            mod[:dests].each { |dest| stack << [dest, name ]}
         elsif mod[:type] == nil
             # Broadcaster!
-            mod[:dests].each { |dest| stack << [dest, pulse, name ]}
+            mod[:dests].each { |dest| stack << [dest, name ]}
         end
     end
 end
 
 
+p(low_signals)
+p(high_signals)
 p(low_signals * high_signals)
-# p(high_signals)
-
     # .reduce({}) do |acc, ((type, name, dest))|
     #     dests = dest.split(", ")
     #     state = nil
