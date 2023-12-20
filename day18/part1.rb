@@ -1,8 +1,15 @@
 #!/usr/bin/env ruby
 
 #D 2 (#411b91)
-
+require "json"
 require "matrix"
+require "colorize"
+
+part2_method_data = 
+part2_map = {}
+JSON.parse(File.read("day18/part2.json")).each do |x, y|
+    part2_map[Vector[x, y]] = [x, y]
+end
 
 input = STDIN.read.lines(chomp: true)
     .map{ _1.scan /([A-Z]) (\d*) \(([^)]*)/ }
@@ -52,6 +59,14 @@ end
 
 total = 0
 
+print(" ")
+(max_x + 2).times do |x|
+    v1 = x % 10
+    print(v1 == 0 ? v1.to_s.red : v1)
+    # print(x % 10 == 0 ?x % 10)
+end
+print("\n")
+
 (max_y + 2).times do |y|
     # in_cell = 0
     # total_in_row = 0
@@ -60,14 +75,18 @@ total = 0
     # end
 
     # print(total_in_row, " - ")
+    v1 = y % 10
+    print(v1 == 0 ? v1.to_s.red : v1)
+
     (max_x + 2).times do |x|
         if input[Vector[x, y]]
             # in_cell += input[Vector[x, y]][1]
             # in_hole +=1
             total +=1
-            print("#")
+            print(part2_map[Vector[x, y]] ? "#".green : "#")
+        elsif part2_map[Vector[x, y]]
+            print("$".red)
         else
-            
             # exit
             # if in_cell % 2 == 1 && in_cell != total_in_row
             #     total +=1
