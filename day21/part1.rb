@@ -43,20 +43,26 @@ max_steps = 64
 
 heap << [start, 0]
 visited = {start => 0}
+valid = {start => 1}
 
 # Probs use heap ordered by min number
 while (current, steps = heap.pop) do
-    p(steps)
+    # p(steps)
     # print("Visiting: ", current, ", Steps:", steps, "\n")
     [Vector[1,0], Vector[-1,0], Vector[0, 1], Vector[0, -1]].each do |direction|
         next_cell = current + direction
-        # next if visited[next_cell] && visited[next_cell] < steps + 1
+        # next if visited[next_cell] && visited[next_cell] > steps + 1
+        next if valid[next_cell]
         next if garden[next_cell]
-        visited[next_cell] = steps + 1
+        # next if visited[next_cell] && visited[next_cell] % 2 == 0
+        valid[next_cell] = 1 if ((steps + 1) % 2) == 0
+        # visited[next_cell] = (steps + 1 == 
+        # next if (steps + 1 % 2) == 0
         heap << [next_cell, steps + 1] if steps + 1 < max_steps
     end
 end
 
+p(valid.keys.size)
 # p(garden.map{_1})
 # exit
 
@@ -78,7 +84,7 @@ end
 # end
 
 
-p(visited.filter{|k, v| v == 6}.size)
+# p(visited.filter{|k, v| v == 6}.size)
 # p(visited.size)
 
 exit
