@@ -1,7 +1,7 @@
 require 'json'
 require 'colorize'
 
-DIRECTION_MAP = {"R" => Vector[1, 0], "L" => Vector[-1, 0], "U" => Vector[0, -1], "D" => Vector[0,1]}
+# DIRECTION_MAP = {"R" => Vector[1, 0], "L" => Vector[-1, 0], "U" => Vector[0, -1], "D" => Vector[0,1]}
 
 SQUARE_COLORS = [
     # :red,
@@ -95,10 +95,12 @@ def area_from_directions(directions)
     horizontal_side = :LEFT_SIDE
 
     total_travelled = 0
-    directions.each_with_index do |(direction, distance, colour), idx|
+    directions.each_with_index do |(direction, distance), idx|
 
         next_direction, _ = directions[idx % directions.size + 1]
 
+        # p(direction)
+        # exit
 
         # print("x ", x, " y ", y, " area ", area, "\n")
         # total_travelled += distance

@@ -4,7 +4,7 @@ require "matrix"
 require "colorize"
 require_relative "shared"
 
-DIRECTION_MAP = {"R" => Vector[1, 0], "L" => Vector[-1, 0], "U" => Vector[0, -1], "D" => Vector[0,1]}
+# DIRECTION_MAP = {"R" => Vector[1, 0], "L" => Vector[-1, 0], "U" => Vector[0, -1], "D" => Vector[0,1]}
 
 # def draw(nodes, extra)
 #     # p(extra)
@@ -28,10 +28,18 @@ DIRECTION_MAP = {"R" => Vector[1, 0], "L" => Vector[-1, 0], "U" => Vector[0, -1]
 #     end
 #     # p(total)
 # end
+DIRECTION_MAP = {0 => "R", 1 => "D", 2 => "L", 3 => "U"}
 
 directions = STDIN.read.lines(chomp: true)
-    .map{ _1.scan /([A-Z]) (\d*) \(([^)]*)/ }
-    .map{ |((direction, distance, colour))| [direction, distance.to_i, colour]}
+    .map{ _1.scan /\(#([^)]{5})(.)/ }
+    .map do |((hex, direction))|
+        [DIRECTION_MAP[direction.to_i], hex.hex, ]
+    end
+    # .map do |[_1[0][3], _1[0][2].hex]}
+    # .map{ |((direction, distance, hex, type))| [direction, distance.to_i, hex, type]}
+
+# p(directions.first)
+# exit
 
 p(area_from_directions(directions))
 exit
